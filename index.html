@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DEEPAK LIFE SCIENCES HOSPITAL — NABH 2nd Edition Policy Portal</title>
+  <style>
+    :root {
+      --navy: #0b2545;
+      --blue: #0284c7;
+      --blue-light: #e0f2fe;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #cbd5e1;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    /* LOGIN SCREEN */
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0b2545 0%, #0369a1 100%);
+      padding: 20px;
+    }
+    .login-card {
+      background: #fff;
+      width: 100%;
+      max-width: 440px;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.28);
+      text-align: center;
+    }
+    .dls-cross {
+      width: 68px; height: 68px;
+      margin: 0 auto 14px;
+      border-radius: 50%;
+      border: 4px solid var(--navy);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 20px; color: var(--blue);
+      background: #f8fafc;
+    }
+    .login-card h1 { font-size: 1.28rem; color: var(--navy); font-weight: 800; letter-spacing: 0.3px; }
+    .login-card .unit { font-size: 0.85rem; color: var(--muted); font-weight: 600; margin-top: 2px; }
+    .login-card .addr { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+    .login-card .tagline { font-size: 0.82rem; color: var(--blue); font-style: italic; font-weight: 600; margin: 6px 0 18px; }
+    .form-group { text-align: left; margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; color: var(--navy); }
+    .form-group input {
+      width: 100%; padding: 11px 14px; border: 1.5px solid var(--border);
+      border-radius: 8px; font-size: 0.95rem; outline: none;
+    }
+    .form-group input:focus { border-color: var(--blue); }
+    .btn-primary {
+      width: 100%; padding: 12px; background: var(--navy); color: #fff;
+      border: none; border-radius: 8px; font-size: 1rem; font-weight: 700;
+      cursor: pointer; transition: 0.2s;
+    }
+    .btn-primary:hover { background: var(--blue); }
+    #loginErr { color: #dc2626; font-size: 0.85rem; margin-top: 10px; font-weight: 600; }
+
+    /* MAIN PORTAL */
+    #appScreen { display: none; min-height: 100vh; flex-direction: column; }
+
+    .topbar {
+      background: var(--navy);
+      color: #fff;
+      padding: 12px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+    }
+    .brand-wrap { display: flex; align-items: center; gap: 12px; }
+    .brand-badge {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: #fff; color: var(--navy);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 15px; border: 2px solid var(--blue);
+    }
+    .brand-title { font-size: 1.1rem; font-weight: 800; letter-spacing: 0.4px; }
+    .brand-sub { font-size: 0.78rem; color: #bae6fd; }
+    .top-actions { display: flex; align-items: center; gap: 10px; }
+    .user-pill {
+      background: rgba(255,255,255,0.12); padding: 6px 12px;
+      border-radius: 20px; font-size: 0.82rem;
+    }
+    .btn-sm {
+      padding: 7px 13px; border-radius: 7px; border: none;
+      font-size: 0.83rem; font-weight: 600; cursor: pointer;
+    }
+    .btn-sync { background: #0284c7; color: #fff; }
+    .btn-logout { background: #ef4444; color: #fff; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      flex: 1;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      background: #fff;
+      border-right: 1px solid var(--border);
+      padding: 16px;
+      height: calc(100vh - 68px);
+      position: sticky;
+      top: 68px;
+      overflow-y: auto;
+    }
+    .search-box {
+      width: 100%; padding: 10px 12px; border: 1.5px solid var(--border);
+      border-radius: 8px; font-size: 0.92rem; margin-bottom: 12px;
+    }
+    .chapter-tabs {
+      display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 14px;
+    }
+    .chap-btn {
+      padding: 4px 9px; font-size: 0.76rem; font-weight: 700;
+      border: 1px solid var(--border); border-radius: 6px;
+      background: #f8fafc; color: var(--navy); cursor: pointer;
+    }
+    .chap-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+    .policy-item {
+      padding: 10px 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .policy-item:hover { background: #f0f9ff; border-color: var(--blue); }
+    .policy-item.active { background: var(--blue-light); border-color: var(--blue); border-left: 4px solid var(--navy); }
+    .p-code { font-size: 0.76rem; font-weight: 800; color: var(--blue); }
+    .p-title { font-size: 0.88rem; font-weight: 600; color: var(--text); margin-top: 2px; }
+
+    /* VIEWER AREA */
+    .viewer-wrap { padding: 24px; overflow-y: auto; }
+    .viewer-toolbar {
+      background: #fff; padding: 12px 18px; border-radius: 10px;
+      border: 1px solid var(--border); margin-bottom: 18px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+    }
+    .toolbar-btns { display: flex; gap: 8px; }
+    .btn-print { background: var(--navy); color: #fff; }
+    .btn-edit { background: #0d9488; color: #fff; }
+    .btn-save { background: #16a34a; color: #fff; display: none; }
+
+    /* DOCUMENT PAPER & 30% INCREASED FONT SIZE FOR BODY */
+    .doc-paper {
+      background: #fff;
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 38px 44px;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+      border: 1px solid #e2e8f0;
+    }
+
+    /* COVER SHEET STYLING */
+    .cover-sheet {
+      border: 2px solid var(--navy);
+      padding: 28px;
+      border-radius: 6px;
+      margin-bottom: 36px;
+      page-break-after: always;
+    }
+    .cover-letterhead {
+      display: flex; align-items: center; gap: 16px;
+      border-bottom: 3px solid var(--navy);
+      padding-bottom: 14px;
+    }
+    .hosp-emblem {
+      width: 66px; height: 66px; border-radius: 50%;
+      border: 4px solid var(--navy);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 20px; color: var(--blue);
+      flex-shrink: 0;
+    }
+    .hosp-title { font-size: 1.45rem; font-weight: 900; color: var(--navy); letter-spacing: 0.5px; }
+    .hosp-unit { font-size: 0.92rem; font-weight: 700; color: var(--muted); }
+    .hosp-addr { font-size: 0.88rem; color: #1e293b; margin-top: 2px; }
+    .hosp-contact { font-size: 0.85rem; color: var(--blue); font-weight: 600; margin-top: 2px; }
+    .cover-badge {
+      display: inline-block; background: var(--blue-light); color: var(--navy);
+      font-weight: 700; font-size: 0.85rem; padding: 5px 14px; border-radius: 20px;
+      margin-top: 18px;
+    }
+    .cover-dept {
+      font-size: 1.05rem; font-weight: 800; color: var(--blue);
+      margin-top: 16px; text-transform: uppercase;
+    }
+    .cover-policy-title {
+      font-size: 1.55rem; font-weight: 900; color: var(--navy);
+      margin: 10px 0 14px; line-height: 1.3;
+    }
+    .cover-code-pill {
+      display: inline-block; background: var(--navy); color: #fff;
+      font-weight: 700; padding: 6px 16px; border-radius: 6px; font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+    .cover-meta-table {
+      width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 0.96rem;
+    }
+    .cover-meta-table th, .cover-meta-table td {
+      border: 1px solid #94a3b8; padding: 9px 12px; text-align: left;
+    }
+    .cover-meta-table th { background: #f1f5f9; width: 38%; color: var(--navy); }
+    .cover-sign-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 26px;
+    }
+    .sign-box {
+      border: 1px solid #94a3b8; padding: 34px 10px 10px; text-align: center;
+      border-radius: 4px; font-size: 0.84rem;
+    }
+    .sign-box span { display: block; color: var(--muted); font-size: 0.78rem; }
+
+    /* POLICY BODY - 30% LARGER FONT SIZE */
+    .policy-body-content .sec-h2 {
+      font-size: 1.38rem; /* +30% */
+      font-weight: 800;
+      color: var(--navy);
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin: 22px 0 10px;
+      text-align: left;
+    }
+    .policy-body-content .sec-h3 {
+      font-size: 1.2rem; /* +30% */
+      font-weight: 700;
+      color: #0369a1;
+      margin: 15px 0 6px;
+      text-align: left;
+    }
+    .policy-body-content .sec-p {
+      font-size: 1.14rem; /* +30% larger readable body font */
+      line-height: 1.65;
+      color: #1e293b;
+      margin-bottom: 9px;
+      text-align: left;
+    }
+    .table-wrap { overflow-x: auto; margin: 14px 0; }
+    .hindi-table {
+      width: 100%; border-collapse: collapse; font-size: 1.02rem; /* +30% */
+    }
+    .hindi-table th, .hindi-table td {
+      border: 1px solid #64748b; padding: 9px 11px; text-align: left; vertical-align: top;
+    }
+    .hindi-table th { background: #e2e8f0; color: var(--navy); font-weight: 800; }
+
+    /* RUNNING HEADER & FOOTER FOR PRINT */
+    .print-header, .print-footer { display: none; }
+
+    @media print {
+      body { background: #fff; }
+      #loginScreen, .topbar, .sidebar, .viewer-toolbar { display: none !important; }
+      .layout { display: block; }
+      .viewer-wrap { padding: 0; }
+      .doc-paper { box-shadow: none; border: none; padding: 0; max-width: 100%; }
+      .print-header {
+        display: flex; justify-content: space-between; align-items: center;
+        border-bottom: 2px solid var(--navy); padding-bottom: 6px; margin-bottom: 14px;
+        font-size: 11px; color: var(--navy); font-weight: 700;
+      }
+      .print-footer {
+        display: flex; justify-content: space-between;
+        border-top: 1px solid #94a3b8; padding-top: 6px; margin-top: 20px;
+        font-size: 10px; color: #475569;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { height: auto; position: static; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN SCREEN -->
+  <div id="loginScreen">
+    <div class="login-card">
+      <div class="dls-cross">DLS</div>
+      <h1>DEEPAK LIFE SCIENCES HOSPITAL</h1>
+      <div class="unit">(A Unit of Deepak Life Sciences Pvt. Ltd.)</div>
+      <div class="addr">Sitapur Road, Near Khadri Masjid, Sherwani Nagar, Lucknow</div>
+      <div class="tagline">"Healing With Feelings"</div>
+      <form onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label>User ID / Username</label>
+          <input type="text" id="loginUser" placeholder="admin / quality / staff" required />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPass" placeholder="••••••••" required />
+        </div>
+        <button type="submit" class="btn-primary" id="loginBtn">Access NABH 2nd Edition Portal</button>
+        <div id="loginErr"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MAIN PORTAL -->
+  <div id="appScreen">
+    <header class="topbar">
+      <div class="brand-wrap">
+        <div class="brand-badge">DLS</div>
+        <div>
+          <div class="brand-title">DEEPAK LIFE SCIENCES HOSPITAL</div>
+          <div class="brand-sub">NABH 2nd Edition Entry Level Standard Operating Policies (SOP Portal)</div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <span class="user-pill" id="userDisplay">User</span>
+        <button class="btn-sm btn-sync" id="resyncBtn" style="display:none;" onclick="triggerResync()">↻ Sync Doc</button>
+        <button class="btn-sm btn-logout" onclick="logout()">Logout</button>
+      </div>
+    </header>
+
+    <div class="layout">
+      <!-- LEFT SIDEBAR -->
+      <aside class="sidebar">
+        <input type="text" class="search-box" id="searchInput" placeholder="Search policy, code, or Hindi term..." oninput="renderPolicyList()" />
+        <div class="chapter-tabs" id="chapterTabs"></div>
+        <div id="policyList">Loading policies...</div>
+      </aside>
+
+      <!-- RIGHT CONTENT VIEWER -->
+      <main class="viewer-wrap">
+        <div class="viewer-toolbar">
+          <div>
+            <strong id="activeCodeBadge" style="color:var(--navy);">Select a Policy</strong>
+            <span id="activeRefBadge" style="font-size:0.84rem; color:var(--muted); margin-left:10px;"></span>
+          </div>
+          <div class="toolbar-btns">
+            <button class="btn-sm btn-edit" id="editBtn" style="display:none;" onclick="toggleEdit()">✎ Edit Content</button>
+            <button class="btn-sm btn-save" id="saveBtn" onclick="saveEdits()">💾 Save Changes</button>
+            <button class="btn-sm btn-print" onclick="window.print()">🖨️ Print / Save PDF</button>
+          </div>
+        </div>
+
+        <div class="doc-paper" id="docPaper">
+          <div class="print-header">
+            <span>DEEPAK LIFE SCIENCES HOSPITAL — LUCKNOW</span>
+            <span id="printDocCode">NABH 2nd Edition Policy</span>
+          </div>
+
+          <div id="coverContainer"></div>
+          <div id="bodyContainer" class="policy-body-content"></div>
+
+          <div class="print-footer">
+            <span>Controlled Document — Deepak Life Sciences Pvt. Ltd. | Mob.: 9415892022, 9415639155</span>
+            <span>"Healing With Feelings"</span>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // यहाँ अपना नया Apps Script Web App URL पेस्ट करें:
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQDJLD8sI-UctabLfNLePD0WkLV3nXtifs5m1lnVMO1lJpuADJO4p9KLah-k2YmZmx/exec";
+
+    let allPolicies = [];
+    let selectedChapter = "ALL";
+    let currentPolicy = null;
+    let currentUser = null;
+    let isEditing = false;
+
+    const CHAPTERS = ["ALL", "AAC", "COP", "PRE", "MOM", "IPC", "PSQ", "ROM", "FMS", "HRM", "IMS"];
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const btn = document.getElementById("loginBtn");
+      const err = document.getElementById("loginErr");
+      err.textContent = "";
+      btn.disabled = true;
+      btn.textContent = "Verifying...";
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "login",
+            username: document.getElementById("loginUser").value,
+            password: document.getElementById("loginPass").value
+          })
+        });
+        const data = await res.json();
+        if (data.status === "success") {
+          currentUser = data.user;
+          sessionStorage.setItem("dlsh_user", JSON.stringify(currentUser));
+          initPortal();
+        } else {
+          err.textContent = data.message || "Invalid credentials";
+        }
+      } catch (ex) {
+        err.textContent = "Connection error. Check SCRIPT_URL.";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Access NABH 2nd Edition Portal";
+      }
+    }
+
+    function logout() {
+      sessionStorage.removeItem("dlsh_user");
+      location.reload();
+    }
+
+    async function initPortal() {
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("appScreen").style.display = "flex";
+      document.getElementById("userDisplay").textContent = `${currentUser.fullName} (${currentUser.role})`;
+
+      if (currentUser.role === "Admin") {
+        document.getElementById("editBtn").style.display = "inline-block";
+        document.getElementById("resyncBtn").style.display = "inline-block";
+      }
+
+      renderChapterTabs();
+      await loadPolicies();
+    }
+
+    function renderChapterTabs() {
+      const container = document.getElementById("chapterTabs");
+      container.innerHTML = CHAPTERS.map(ch => `
+        <button class="chap-btn ${ch === selectedChapter ? 'active' : ''}" onclick="selectChapter('${ch}')">${ch}</button>
+      `).join("");
+    }
+
+    function selectChapter(ch) {
+      selectedChapter = ch;
+      renderChapterTabs();
+      renderPolicyList();
+    }
+
+    async function loadPolicies() {
+      const listEl = document.getElementById("policyList");
+      listEl.innerHTML = "Fetching policies from Master Database...";
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getPolicies`);
+        const data = await res.json();
+        allPolicies = data.policies || [];
+        renderPolicyList();
+        if (allPolicies.length > 0) {
+          openPolicy(allPolicies[0].code);
+        }
+      } catch (e) {
+        listEl.innerHTML = "Failed to load policies.";
+      }
+    }
+
+    function renderPolicyList() {
+      const q = document.getElementById("searchInput").value.toLowerCase();
+      const filtered = allPolicies.filter(p => {
+        const matchChap = selectedChapter === "ALL" || p.chapter === selectedChapter;
+        const matchQuery = !q ||
+          p.code.toLowerCase().includes(q) ||
+          p.title.toLowerCase().includes(q) ||
+          p.bodyHtml.toLowerCase().includes(q);
+        return matchChap && matchQuery;
+      });
+
+      const listEl = document.getElementById("policyList");
+      if (filtered.length === 0) {
+        listEl.innerHTML = "<p style='color:#64748b;font-size:0.88rem;'>No matching policies found.</p>";
+        return;
+      }
+
+      listEl.innerHTML = filtered.map(p => `
+        <div class="policy-item ${currentPolicy && currentPolicy.code === p.code ? 'active' : ''}" onclick="openPolicy('${p.code}')">
+          <div class="p-code">${p.code} &bull; ${p.nabhRef}</div>
+          <div class="p-title">${p.title}</div>
+        </div>
+      `).join("");
+    }
+
+    function openPolicy(code) {
+      const p = allPolicies.find(item => item.code === code);
+      if (!p) return;
+      currentPolicy = p;
+      isEditing = false;
+
+      const bodyEl = document.getElementById("bodyContainer");
+      bodyEl.contentEditable = "false";
+      document.getElementById("saveBtn").style.display = "none";
+      if (currentUser && currentUser.role === "Admin") {
+        document.getElementById("editBtn").style.display = "inline-block";
+      }
+
+      document.getElementById("activeCodeBadge").textContent = `${p.code} — ${p.title}`;
+      document.getElementById("activeRefBadge").textContent = `NABH Ref: ${p.nabhRef}`;
+      document.getElementById("printDocCode").textContent = `${p.code} | ${p.revision}`;
+      document.getElementById("coverContainer").innerHTML = p.coverHtml;
+      bodyEl.innerHTML = p.bodyHtml;
+
+      renderPolicyList();
+    }
+
+    function toggleEdit() {
+      if (!currentPolicy) return;
+      isEditing = true;
+      const bodyEl = document.getElementById("bodyContainer");
+      bodyEl.contentEditable = "true";
+      bodyEl.focus();
+      document.getElementById("editBtn").style.display = "none";
+      document.getElementById("saveBtn").style.display = "inline-block";
+    }
+
+    async function saveEdits() {
+      if (!currentPolicy) return;
+      const saveBtn = document.getElementById("saveBtn");
+      saveBtn.textContent = "Saving...";
+      saveBtn.disabled = true;
+
+      const updatedHtml = document.getElementById("bodyContainer").innerHTML;
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "updatePolicy",
+            code: currentPolicy.code,
+            bodyHtml: updatedHtml
+          })
+        });
+        const data = await res.json();
+        if (data.status === "success") {
+          currentPolicy.bodyHtml = updatedHtml;
+          alert("✅ Policy saved to Google Sheet!");
+          openPolicy(currentPolicy.code);
+        } else {
+          alert("❌ Error: " + data.message);
+        }
+      } catch (e) {
+        alert("❌ Network error while saving.");
+      } finally {
+        saveBtn.textContent = "💾 Save Changes";
+        saveBtn.disabled = false;
+      }
+    }
+
+    async function triggerResync() {
+      if (!confirm("Master Google Doc से सभी पॉलिसियों को दोबारा Sync करें?")) return;
+      const btn = document.getElementById("resyncBtn");
+      btn.textContent = "Syncing...";
+      btn.disabled = true;
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "resync" })
+        });
+        const data = await res.json();
+        alert(`✅ Synced ${data.count} policies successfully!`);
+        await loadPolicies();
+      } catch (e) {
+        alert("❌ Sync failed.");
+      } finally {
+        btn.textContent = "↻ Sync Doc";
+        btn.disabled = false;
+      }
+    }
+
+    // Auto-restore session
+    window.onload = () => {
+      const saved = sessionStorage.getItem("dlsh_user");
+      if (saved) {
+        currentUser = JSON.parse(saved);
+        initPortal();
+      }
+    };
+  </script>
+</body>
+</html>
