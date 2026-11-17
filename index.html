@@ -3,588 +3,474 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DEEPAK LIFE SCIENCES HOSPITAL — NABH 2nd Edition Policy Portal</title>
+  <title>Deepak Life Sciences Hospital, Lucknow - NABH 6th Edition Live Policy Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
-    :root {
-      --navy: #0b2545;
-      --blue: #0284c7;
-      --blue-light: #e0f2fe;
-      --bg: #f1f5f9;
-      --card: #ffffff;
-      --text: #0f172a;
-      --muted: #475569;
-      --border: #cbd5e1;
+    /* Cover Page को छोड़कर अंदर के पूरे मैटर का फॉन्ट 30% बड़ा (स्क्रीन और प्रिंट दोनों में) */
+    #policyContentArea table.print-wrapper > tbody div:not(.policy-cover-page):not(.policy-cover-page *),
+    #policyContentArea table.print-wrapper > tbody li {
+      font-size: 1.125rem !important; /* ~18px (14px से 30% अधिक) */
+      line-height: 1.65 !important;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
+    #policyContentArea table.print-wrapper > tbody h3:not(.policy-cover-page *) {
+      font-size: 1.32rem !important; /* ~21px (16px से 30% अधिक) */
+      line-height: 1.4 !important;
     }
 
-    /* LOGIN SCREEN */
-    #loginScreen {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #0b2545 0%, #0369a1 100%);
-      padding: 20px;
+    #policyContentArea table.print-wrapper > tbody table:not(.policy-cover-page *) td,
+    #policyContentArea table.print-wrapper > tbody table:not(.policy-cover-page *) th {
+      font-size: 0.975rem !important; /* ~15.6px (12px से 30% अधिक) */
+      line-height: 1.45 !important;
     }
-    .login-card {
-      background: #fff;
-      width: 100%;
-      max-width: 440px;
-      border-radius: 16px;
-      padding: 32px;
-      box-shadow: 0 20px 45px rgba(0,0,0,0.28);
-      text-align: center;
-    }
-    .dls-cross {
-      width: 68px; height: 68px;
-      margin: 0 auto 14px;
-      border-radius: 50%;
-      border: 4px solid var(--navy);
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 900; font-size: 20px; color: var(--blue);
-      background: #f8fafc;
-    }
-    .login-card h1 { font-size: 1.28rem; color: var(--navy); font-weight: 800; letter-spacing: 0.3px; }
-    .login-card .unit { font-size: 0.85rem; color: var(--muted); font-weight: 600; margin-top: 2px; }
-    .login-card .addr { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
-    .login-card .tagline { font-size: 0.82rem; color: var(--blue); font-style: italic; font-weight: 600; margin: 6px 0 18px; }
-    .form-group { text-align: left; margin-bottom: 14px; }
-    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; color: var(--navy); }
-    .form-group input {
-      width: 100%; padding: 11px 14px; border: 1.5px solid var(--border);
-      border-radius: 8px; font-size: 0.95rem; outline: none;
-    }
-    .form-group input:focus { border-color: var(--blue); }
-    .btn-primary {
-      width: 100%; padding: 12px; background: var(--navy); color: #fff;
-      border: none; border-radius: 8px; font-size: 1rem; font-weight: 700;
-      cursor: pointer; transition: 0.2s;
-    }
-    .btn-primary:hover { background: var(--blue); }
-    #loginErr { color: #dc2626; font-size: 0.85rem; margin-top: 10px; font-weight: 600; }
-
-    /* MAIN PORTAL */
-    #appScreen { display: none; min-height: 100vh; flex-direction: column; }
-
-    .topbar {
-      background: var(--navy);
-      color: #fff;
-      padding: 12px 22px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.18);
-    }
-    .brand-wrap { display: flex; align-items: center; gap: 12px; }
-    .brand-badge {
-      width: 44px; height: 44px; border-radius: 50%;
-      background: #fff; color: var(--navy);
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 900; font-size: 15px; border: 2px solid var(--blue);
-    }
-    .brand-title { font-size: 1.1rem; font-weight: 800; letter-spacing: 0.4px; }
-    .brand-sub { font-size: 0.78rem; color: #bae6fd; }
-    .top-actions { display: flex; align-items: center; gap: 10px; }
-    .user-pill {
-      background: rgba(255,255,255,0.12); padding: 6px 12px;
-      border-radius: 20px; font-size: 0.82rem;
-    }
-    .btn-sm {
-      padding: 7px 13px; border-radius: 7px; border: none;
-      font-size: 0.83rem; font-weight: 600; cursor: pointer;
-    }
-    .btn-sync { background: #0284c7; color: #fff; }
-    .btn-logout { background: #ef4444; color: #fff; }
-
-    .layout {
-      display: grid;
-      grid-template-columns: 340px 1fr;
-      flex: 1;
-    }
-
-    /* SIDEBAR */
-    .sidebar {
-      background: #fff;
-      border-right: 1px solid var(--border);
-      padding: 16px;
-      height: calc(100vh - 68px);
-      position: sticky;
-      top: 68px;
-      overflow-y: auto;
-    }
-    .search-box {
-      width: 100%; padding: 10px 12px; border: 1.5px solid var(--border);
-      border-radius: 8px; font-size: 0.92rem; margin-bottom: 12px;
-    }
-    .chapter-tabs {
-      display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 14px;
-    }
-    .chap-btn {
-      padding: 4px 9px; font-size: 0.76rem; font-weight: 700;
-      border: 1px solid var(--border); border-radius: 6px;
-      background: #f8fafc; color: var(--navy); cursor: pointer;
-    }
-    .chap-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
-
-    .policy-item {
-      padding: 10px 12px;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      margin-bottom: 8px;
-      cursor: pointer;
-      transition: 0.15s;
-    }
-    .policy-item:hover { background: #f0f9ff; border-color: var(--blue); }
-    .policy-item.active { background: var(--blue-light); border-color: var(--blue); border-left: 4px solid var(--navy); }
-    .p-code { font-size: 0.76rem; font-weight: 800; color: var(--blue); }
-    .p-title { font-size: 0.88rem; font-weight: 600; color: var(--text); margin-top: 2px; }
-
-    /* VIEWER AREA */
-    .viewer-wrap { padding: 24px; overflow-y: auto; }
-    .viewer-toolbar {
-      background: #fff; padding: 12px 18px; border-radius: 10px;
-      border: 1px solid var(--border); margin-bottom: 18px;
-      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
-    }
-    .toolbar-btns { display: flex; gap: 8px; }
-    .btn-print { background: var(--navy); color: #fff; }
-    .btn-edit { background: #0d9488; color: #fff; }
-    .btn-save { background: #16a34a; color: #fff; display: none; }
-
-    /* DOCUMENT PAPER & 30% INCREASED FONT SIZE FOR BODY */
-    .doc-paper {
-      background: #fff;
-      max-width: 920px;
-      margin: 0 auto;
-      padding: 38px 44px;
-      border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
-      border: 1px solid #e2e8f0;
-    }
-
-    /* COVER SHEET STYLING */
-    .cover-sheet {
-      border: 2px solid var(--navy);
-      padding: 28px;
-      border-radius: 6px;
-      margin-bottom: 36px;
-      page-break-after: always;
-    }
-    .cover-letterhead {
-      display: flex; align-items: center; gap: 16px;
-      border-bottom: 3px solid var(--navy);
-      padding-bottom: 14px;
-    }
-    .hosp-emblem {
-      width: 66px; height: 66px; border-radius: 50%;
-      border: 4px solid var(--navy);
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 900; font-size: 20px; color: var(--blue);
-      flex-shrink: 0;
-    }
-    .hosp-title { font-size: 1.45rem; font-weight: 900; color: var(--navy); letter-spacing: 0.5px; }
-    .hosp-unit { font-size: 0.92rem; font-weight: 700; color: var(--muted); }
-    .hosp-addr { font-size: 0.88rem; color: #1e293b; margin-top: 2px; }
-    .hosp-contact { font-size: 0.85rem; color: var(--blue); font-weight: 600; margin-top: 2px; }
-    .cover-badge {
-      display: inline-block; background: var(--blue-light); color: var(--navy);
-      font-weight: 700; font-size: 0.85rem; padding: 5px 14px; border-radius: 20px;
-      margin-top: 18px;
-    }
-    .cover-dept {
-      font-size: 1.05rem; font-weight: 800; color: var(--blue);
-      margin-top: 16px; text-transform: uppercase;
-    }
-    .cover-policy-title {
-      font-size: 1.55rem; font-weight: 900; color: var(--navy);
-      margin: 10px 0 14px; line-height: 1.3;
-    }
-    .cover-code-pill {
-      display: inline-block; background: var(--navy); color: #fff;
-      font-weight: 700; padding: 6px 16px; border-radius: 6px; font-size: 0.95rem;
-      margin-bottom: 20px;
-    }
-    .cover-meta-table {
-      width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 0.96rem;
-    }
-    .cover-meta-table th, .cover-meta-table td {
-      border: 1px solid #94a3b8; padding: 9px 12px; text-align: left;
-    }
-    .cover-meta-table th { background: #f1f5f9; width: 38%; color: var(--navy); }
-    .cover-sign-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 26px;
-    }
-    .sign-box {
-      border: 1px solid #94a3b8; padding: 34px 10px 10px; text-align: center;
-      border-radius: 4px; font-size: 0.84rem;
-    }
-    .sign-box span { display: block; color: var(--muted); font-size: 0.78rem; }
-
-    /* POLICY BODY - 30% LARGER FONT SIZE */
-    .policy-body-content .sec-h2 {
-      font-size: 1.38rem; /* +30% */
-      font-weight: 800;
-      color: var(--navy);
-      border-bottom: 2px solid #e2e8f0;
-      padding-bottom: 4px;
-      margin: 22px 0 10px;
-      text-align: left;
-    }
-    .policy-body-content .sec-h3 {
-      font-size: 1.2rem; /* +30% */
-      font-weight: 700;
-      color: #0369a1;
-      margin: 15px 0 6px;
-      text-align: left;
-    }
-    .policy-body-content .sec-p {
-      font-size: 1.14rem; /* +30% larger readable body font */
-      line-height: 1.65;
-      color: #1e293b;
-      margin-bottom: 9px;
-      text-align: left;
-    }
-    .table-wrap { overflow-x: auto; margin: 14px 0; }
-    .hindi-table {
-      width: 100%; border-collapse: collapse; font-size: 1.02rem; /* +30% */
-    }
-    .hindi-table th, .hindi-table td {
-      border: 1px solid #64748b; padding: 9px 11px; text-align: left; vertical-align: top;
-    }
-    .hindi-table th { background: #e2e8f0; color: var(--navy); font-weight: 800; }
-
-    /* RUNNING HEADER & FOOTER FOR PRINT */
-    .print-header, .print-footer { display: none; }
 
     @media print {
-      body { background: #fff; }
-      #loginScreen, .topbar, .sidebar, .viewer-toolbar { display: none !important; }
-      .layout { display: block; }
-      .viewer-wrap { padding: 0; }
-      .doc-paper { box-shadow: none; border: none; padding: 0; max-width: 100%; }
-      .print-header {
-        display: flex; justify-content: space-between; align-items: center;
-        border-bottom: 2px solid var(--navy); padding-bottom: 6px; margin-bottom: 14px;
-        font-size: 11px; color: var(--navy); font-weight: 700;
+      @page {
+        size: A4;
+        margin: 10mm 12mm 16mm 12mm;
+        @bottom-right {
+          content: "Page " counter(page) " of " counter(pages);
+          font-size: 9pt;
+          font-weight: bold;
+          color: #1e293b;
+        }
       }
-      .print-footer {
-        display: flex; justify-content: space-between;
-        border-top: 1px solid #94a3b8; padding-top: 6px; margin-top: 20px;
-        font-size: 10px; color: #475569;
-      }
-    }
+      body { background: #ffffff !important; color: #000000 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      body * { visibility: hidden; }
+      #policyReaderCard, #policyReaderCard * { visibility: visible; }
+      #policyReaderCard { position: absolute; left: 0; top: 0; width: 100%; padding: 0 !important; margin: 0 !important; box-shadow: none !important; border: none !important; }
+      .no-print { display: none !important; }
+      table.print-wrapper { width: 100%; border-collapse: collapse; border: none !important; }
+      table.print-wrapper > thead { display: table-header-group; }
+      table.print-wrapper > tfoot { display: table-footer-group; }
+      table.print-wrapper > thead > tr > td,
+      table.print-wrapper > tfoot > tr > td,
+      table.print-wrapper > tbody > tr > td { border: none !important; padding: 0 !important; }
+      .doc-footer-space { padding-top: 12px; }
+      .doc-header-space { padding-bottom: 10px; }
 
-    @media (max-width: 860px) {
-      .layout { grid-template-columns: 1fr; }
-      .sidebar { height: auto; position: static; }
+      /* Cover Page (Page 1) पर बीचोबीच छपे और 1. Objective Page 2 से शुरू हो */
+      .policy-cover-page {
+        page-break-after: always !important;
+        break-after: page !important;
+        min-height: 175mm;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        border: 1.5px solid #cbd5e1 !important;
+        background: #f8fafc !important;
+        padding: 24px !important;
+        margin-top: 10mm !important;
+      }
     }
   </style>
 </head>
-<body>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
 
-  <!-- LOGIN SCREEN -->
-  <div id="loginScreen">
-    <div class="login-card">
-      <div class="dls-cross">DLS</div>
-      <h1>DEEPAK LIFE SCIENCES HOSPITAL</h1>
-      <div class="unit">(A Unit of Deepak Life Sciences Pvt. Ltd.)</div>
-      <div class="addr">Sitapur Road, Near Khadri Masjid, Sherwani Nagar, Lucknow</div>
-      <div class="tagline">"Healing With Feelings"</div>
-      <form onsubmit="handleLogin(event)">
-        <div class="form-group">
-          <label>User ID / Username</label>
-          <input type="text" id="loginUser" placeholder="admin / quality / staff" required />
+  <!-- AUTH SCREEN (LOGIN / SIGNUP) -->
+  <div id="authSection" class="min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white max-w-md w-full rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+      <div class="bg-sky-950 p-6 text-white text-center">
+        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-3 text-sky-900 font-extrabold text-base border-2 border-sky-400 shadow">
+          DLS
         </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="loginPass" placeholder="••••••••" required />
+        <h1 class="text-lg font-extrabold tracking-wide uppercase">DEEPAK LIFE SCIENCES HOSPITAL</h1>
+        <p class="text-sky-200 text-xs font-medium mt-0.5">(A Unit of Deepak Life Sciences Pvt. Ltd.)</p>
+        <p class="text-sky-300 text-[11px] mt-0.5">Sitapur Road, Near Khadri Masjid, Sherwani Nagar, Lucknow</p>
+        <p class="text-amber-300 text-[11px] italic font-medium mt-1">"Healing With Feelings"</p>
+        <p class="text-sky-100 text-xs font-semibold mt-2 bg-white/10 py-1 px-3 rounded-full inline-block">NABH 6th Edition Live Policy & SOP Portal</p>
+      </div>
+
+      <div class="flex border-b border-slate-200">
+        <button id="tabLogin" onclick="switchAuthTab('login')" class="w-1/2 py-3 text-sm font-semibold text-sky-900 border-b-2 border-sky-900 bg-sky-50/50">Staff Login</button>
+        <button id="tabSignup" onclick="switchAuthTab('signup')" class="w-1/2 py-3 text-sm font-semibold text-slate-500 hover:text-sky-900">New Staff Signup</button>
+      </div>
+
+      <form id="loginForm" onsubmit="handleLogin(event)" class="p-6 space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Phone Number (User ID)</label>
+          <input type="tel" id="loginPhone" required placeholder="Enter 10-digit mobile number" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-600 focus:outline-none text-sm">
         </div>
-        <button type="submit" class="btn-primary" id="loginBtn">Access NABH 2nd Edition Portal</button>
-        <div id="loginErr"></div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Password</label>
+          <input type="password" id="loginPassword" required placeholder="Enter your password" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-600 focus:outline-none text-sm">
+        </div>
+        <button type="submit" id="loginBtn" class="w-full bg-sky-900 hover:bg-sky-950 text-white font-semibold py-2.5 rounded-lg transition shadow-sm">
+          Login to Portal
+        </button>
       </form>
+
+      <form id="signupForm" onsubmit="handleSignup(event)" class="p-6 space-y-4 hidden">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Full Name</label>
+          <input type="text" id="regName" required placeholder="e.g. Dr. Rahul Sharma / Sister Priya" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-600 focus:outline-none text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Phone Number (Will be User ID)</label>
+          <input type="tel" id="regPhone" required placeholder="Enter mobile number" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-600 focus:outline-none text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Department</label>
+          <select id="regDept" required class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-600 focus:outline-none text-sm bg-white">
+            <option value="">-- Select Department --</option>
+            <option>Administration & Quality</option>
+            <option>Medical / Doctors</option>
+            <option>Nursing Services</option>
+            <option>ICU / Emergency / OT</option>
+            <option>Pharmacy</option>
+            <option>Laboratory & Radiology</option>
+            <option>Medical Records (MRD)</option>
+            <option>Front Office / Billing</option>
+            <option>HR & Training</option>
+            <option>Maintenance / Biomedical / Housekeeping</option>
+          </select>
+        </div>
+        <button type="submit" id="signupBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-lg transition shadow-sm">
+          Create ID & Password
+        </button>
+      </form>
+
+      <div id="credBox" class="mx-6 mb-6 p-4 bg-amber-50 border border-amber-300 rounded-xl hidden">
+        <p class="text-xs font-bold text-amber-800 uppercase mb-1"><i class="fa-solid fa-key mr-1"></i> Save Your Login Credentials:</p>
+        <p class="text-sm text-slate-800">User ID (Phone): <strong id="showUserId" class="select-all"></strong></p>
+        <p class="text-sm text-slate-800">Password: <strong id="showUserPass" class="select-all text-sky-900"></strong></p>
+        <button onclick="proceedToPortal()" class="mt-3 w-full bg-sky-900 text-white text-xs font-semibold py-2 rounded-lg">Continue to Policies &rarr;</button>
+      </div>
     </div>
   </div>
 
-  <!-- MAIN PORTAL -->
-  <div id="appScreen">
-    <header class="topbar">
-      <div class="brand-wrap">
-        <div class="brand-badge">DLS</div>
-        <div>
-          <div class="brand-title">DEEPAK LIFE SCIENCES HOSPITAL</div>
-          <div class="brand-sub">NABH 2nd Edition Entry Level Standard Operating Policies (SOP Portal)</div>
+  <!-- MAIN POLICY PORTAL DASHBOARD -->
+  <div id="portalSection" class="hidden flex-1 flex flex-col">
+    <header class="bg-sky-950 text-white shadow-md sticky top-0 z-30 no-print">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-white text-sky-950 rounded-full flex items-center justify-center font-extrabold text-xs border-2 border-sky-400">DLS</div>
+          <div>
+            <h1 class="font-extrabold text-sm sm:text-base leading-tight uppercase">DEEPAK LIFE SCIENCES HOSPITAL, LUCKNOW</h1>
+            <p class="text-xs text-sky-200">NABH 6th Edition Live Master Document Reader &bull; Mob.: 9415892022, 9415639155</p>
+          </div>
         </div>
-      </div>
-      <div class="top-actions">
-        <span class="user-pill" id="userDisplay">User</span>
-        <button class="btn-sm btn-sync" id="resyncBtn" style="display:none;" onclick="triggerResync()">↻ Sync Doc</button>
-        <button class="btn-sm btn-logout" onclick="logout()">Logout</button>
+        <div class="flex items-center gap-4">
+          <div class="text-right hidden sm:block">
+            <p id="navUserName" class="text-sm font-semibold"></p>
+            <p id="navUserDept" class="text-xs text-sky-200"></p>
+          </div>
+          <button onclick="logout()" class="bg-sky-900 hover:bg-red-600 px-3 py-1.5 rounded-lg text-xs font-semibold transition">
+            <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
+          </button>
+        </div>
       </div>
     </header>
 
-    <div class="layout">
+    <div class="max-w-7xl w-full mx-auto px-4 py-5 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-5">
+      
       <!-- LEFT SIDEBAR -->
-      <aside class="sidebar">
-        <input type="text" class="search-box" id="searchInput" placeholder="Search policy, code, or Hindi term..." oninput="renderPolicyList()" />
-        <div class="chapter-tabs" id="chapterTabs"></div>
-        <div id="policyList">Loading policies...</div>
-      </aside>
-
-      <!-- RIGHT CONTENT VIEWER -->
-      <main class="viewer-wrap">
-        <div class="viewer-toolbar">
-          <div>
-            <strong id="activeCodeBadge" style="color:var(--navy);">Select a Policy</strong>
-            <span id="activeRefBadge" style="font-size:0.84rem; color:var(--muted); margin-left:10px;"></span>
+      <aside class="lg:col-span-4 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col max-h-[82vh] no-print">
+        <div class="p-3.5 border-b border-slate-200 bg-slate-50 rounded-t-xl">
+          <div class="relative">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+            <input type="text" id="headingSearch" onkeyup="filterHeadings()" placeholder="Search Policy / Chapter / Doc No..." class="w-full pl-8 pr-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-sky-600 focus:outline-none text-xs bg-white">
           </div>
-          <div class="toolbar-btns">
-            <button class="btn-sm btn-edit" id="editBtn" style="display:none;" onclick="toggleEdit()">✎ Edit Content</button>
-            <button class="btn-sm btn-save" id="saveBtn" onclick="saveEdits()">💾 Save Changes</button>
-            <button class="btn-sm btn-print" onclick="window.print()">🖨️ Print / Save PDF</button>
+          <div class="flex justify-between items-center mt-2 text-[11px] text-slate-500 font-semibold">
+            <span>POLICY INDEX</span>
+            <span id="headingCount" class="text-sky-900">Loading...</span>
           </div>
         </div>
 
-        <div class="doc-paper" id="docPaper">
-          <div class="print-header">
-            <span>DEEPAK LIFE SCIENCES HOSPITAL — LUCKNOW</span>
-            <span id="printDocCode">NABH 2nd Edition Policy</span>
+        <div id="headingsList" class="overflow-y-auto divide-y divide-slate-100 flex-1 p-1.5">
+          <div class="text-center py-10 text-slate-400 text-xs">
+            <i class="fa-solid fa-circle-notch fa-spin text-2xl text-sky-700 mb-2"></i>
+            <p>Loading Policies...</p>
+          </div>
+        </div>
+      </aside>
+
+      <!-- RIGHT PANEL: SELECTED POLICY CONTENT VIEWER -->
+      <main class="lg:col-span-8 flex flex-col">
+        <div id="policyReaderCard" class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 sm:p-8 flex-1 min-h-[75vh]">
+          
+          <div id="readerToolbar" class="hidden flex-wrap items-center justify-between gap-2 pb-4 mb-5 border-b border-slate-200 no-print">
+            <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold bg-sky-50 text-sky-900 border border-sky-200">
+              <i class="fa-solid fa-circle-check mr-1.5 text-sky-600"></i> Approved Live Document
+            </span>
+            <div class="flex items-center gap-2">
+              <button onclick="openCorrectionModal()" class="inline-flex items-center px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-900 text-xs font-semibold rounded-lg transition">
+                <i class="fa-solid fa-pen-to-square mr-1.5"></i> Suggest Correction
+              </button>
+              <button onclick="window.print()" class="inline-flex items-center px-3 py-1.5 bg-sky-900 hover:bg-sky-950 text-white text-xs font-semibold rounded-lg transition shadow-sm">
+                <i class="fa-solid fa-print mr-1.5"></i> Print Official Policy
+              </button>
+            </div>
           </div>
 
-          <div id="coverContainer"></div>
-          <div id="bodyContainer" class="policy-body-content"></div>
-
-          <div class="print-footer">
-            <span>Controlled Document — Deepak Life Sciences Pvt. Ltd. | Mob.: 9415892022, 9415639155</span>
-            <span>"Healing With Feelings"</span>
+          <div id="policyContentArea" class="max-w-none">
+            <div class="text-center py-20 text-slate-400">
+              <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl text-sky-800">
+                <i class="fa-solid fa-book-open-reader"></i>
+              </div>
+              <h3 class="text-base font-bold text-slate-700">Select a Policy Heading from the Left</h3>
+              <p class="text-xs text-slate-500 max-w-sm mx-auto mt-1">
+                Click on any NABH policy in the index to view and print it with official Deepak Life Sciences Hospital Header & Footer.
+              </p>
+            </div>
           </div>
+
         </div>
       </main>
     </div>
   </div>
 
+  <!-- CORRECTION MODAL -->
+  <div id="correctionModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50 no-print">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl">
+      <div class="flex justify-between items-center border-b pb-3 mb-4">
+        <h3 class="font-bold text-slate-800"><i class="fa-solid fa-pen-to-square text-amber-600 mr-2"></i>Suggest Policy Correction</h3>
+        <button onclick="closeCorrectionModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <div class="mb-3 bg-slate-50 p-3 rounded-lg border border-slate-200">
+        <p class="text-xs text-slate-500">Selected Policy / Heading:</p>
+        <p id="corrHeadingTitle" class="text-sm font-bold text-sky-900 mt-0.5"></p>
+      </div>
+      <textarea id="corrText" rows="4" placeholder="यहाँ लिखें कि इस पॉलिसी में क्या बदलाव या सुधार (Correction) करना है..." class="w-full p-3 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-sky-600 focus:outline-none"></textarea>
+      <div class="mt-4 flex justify-end gap-2">
+        <button onclick="closeCorrectionModal()" class="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancel</button>
+        <button id="submitCorrBtn" onclick="submitCorrection()" class="px-5 py-2 text-sm bg-sky-900 hover:bg-sky-950 text-white font-semibold rounded-lg">Submit Correction</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // यहाँ अपना नया Apps Script Web App URL पेस्ट करें:
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQDJLD8sI-UctabLfNLePD0WkLV3nXtifs5m1lnVMO1lJpuADJO4p9KLah-k2YmZmx/exec";
+    const API_URL = "YOUR_NEW_DEEPAK_LIFESCIENCES_APPS_SCRIPT_WEB_APP_URL";
 
-    let allPolicies = [];
-    let selectedChapter = "ALL";
-    let currentPolicy = null;
     let currentUser = null;
-    let isEditing = false;
+    let allHeadings = [];
+    let activeHeading = null;
 
-    const CHAPTERS = ["ALL", "AAC", "COP", "PRE", "MOM", "IPC", "PSQ", "ROM", "FMS", "HRM", "IMS"];
+    window.onload = () => {
+      const saved = localStorage.getItem("deepakLifeSciencesDocUser");
+      if (saved) {
+        currentUser = JSON.parse(saved);
+        showPortal();
+      }
+    };
+
+    function switchAuthTab(tab) {
+      document.getElementById("credBox").classList.add("hidden");
+      if (tab === "login") {
+        document.getElementById("loginForm").classList.remove("hidden");
+        document.getElementById("signupForm").classList.add("hidden");
+        document.getElementById("tabLogin").className = "w-1/2 py-3 text-sm font-semibold text-sky-900 border-b-2 border-sky-900 bg-sky-50/50";
+        document.getElementById("tabSignup").className = "w-1/2 py-3 text-sm font-semibold text-slate-500 hover:text-sky-900";
+      } else {
+        document.getElementById("signupForm").classList.remove("hidden");
+        document.getElementById("loginForm").classList.add("hidden");
+        document.getElementById("tabSignup").className = "w-1/2 py-3 text-sm font-semibold text-sky-900 border-b-2 border-sky-900 bg-sky-50/50";
+        document.getElementById("tabLogin").className = "w-1/2 py-3 text-sm font-semibold text-slate-500 hover:text-sky-900";
+      }
+    }
+
+    async function callApi(payload) {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+      return await res.json();
+    }
+
+    async function handleSignup(e) {
+      e.preventDefault();
+      const btn = document.getElementById("signupBtn");
+      btn.disabled = true;
+      btn.innerText = "Creating Account...";
+      try {
+        const res = await callApi({
+          action: "signup",
+          name: document.getElementById("regName").value,
+          phone: document.getElementById("regPhone").value,
+          department: document.getElementById("regDept").value
+        });
+        if (res.status === "success") {
+          currentUser = res.user;
+          localStorage.setItem("deepakLifeSciencesDocUser", JSON.stringify(currentUser));
+          document.getElementById("showUserId").innerText = res.user.phone;
+          document.getElementById("showUserPass").innerText = res.user.password;
+          document.getElementById("credBox").classList.remove("hidden");
+        } else {
+          alert(res.message);
+        }
+      } catch (err) {
+        alert("Server connection error. Please try again.");
+      }
+      btn.disabled = false;
+      btn.innerText = "Create ID & Password";
+    }
 
     async function handleLogin(e) {
       e.preventDefault();
       const btn = document.getElementById("loginBtn");
-      const err = document.getElementById("loginErr");
-      err.textContent = "";
       btn.disabled = true;
-      btn.textContent = "Verifying...";
-
+      btn.innerText = "Verifying...";
       try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify({
-            action: "login",
-            username: document.getElementById("loginUser").value,
-            password: document.getElementById("loginPass").value
-          })
+        const res = await callApi({
+          action: "login",
+          phone: document.getElementById("loginPhone").value,
+          password: document.getElementById("loginPassword").value
         });
-        const data = await res.json();
-        if (data.status === "success") {
-          currentUser = data.user;
-          sessionStorage.setItem("dlsh_user", JSON.stringify(currentUser));
-          initPortal();
+        if (res.status === "success") {
+          currentUser = res.user;
+          localStorage.setItem("deepakLifeSciencesDocUser", JSON.stringify(currentUser));
+          showPortal();
         } else {
-          err.textContent = data.message || "Invalid credentials";
+          alert(res.message);
         }
-      } catch (ex) {
-        err.textContent = "Connection error. Check SCRIPT_URL.";
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Access NABH 2nd Edition Portal";
+      } catch (err) {
+        alert("Server connection error. Please try again.");
       }
+      btn.disabled = false;
+      btn.innerText = "Login to Portal";
     }
 
-    function logout() {
-      sessionStorage.removeItem("dlsh_user");
-      location.reload();
-    }
+    function proceedToPortal() { showPortal(); }
+    function logout() { localStorage.removeItem("deepakLifeSciencesDocUser"); location.reload(); }
 
-    async function initPortal() {
-      document.getElementById("loginScreen").style.display = "none";
-      document.getElementById("appScreen").style.display = "flex";
-      document.getElementById("userDisplay").textContent = `${currentUser.fullName} (${currentUser.role})`;
+    async function showPortal() {
+      document.getElementById("authSection").classList.add("hidden");
+      document.getElementById("portalSection").classList.remove("hidden");
+      document.getElementById("navUserName").innerText = currentUser.name;
+      document.getElementById("navUserDept").innerText = currentUser.department + " (" + currentUser.phone + ")";
 
-      if (currentUser.role === "Admin") {
-        document.getElementById("editBtn").style.display = "inline-block";
-        document.getElementById("resyncBtn").style.display = "inline-block";
-      }
-
-      renderChapterTabs();
-      await loadPolicies();
-    }
-
-    function renderChapterTabs() {
-      const container = document.getElementById("chapterTabs");
-      container.innerHTML = CHAPTERS.map(ch => `
-        <button class="chap-btn ${ch === selectedChapter ? 'active' : ''}" onclick="selectChapter('${ch}')">${ch}</button>
-      `).join("");
-    }
-
-    function selectChapter(ch) {
-      selectedChapter = ch;
-      renderChapterTabs();
-      renderPolicyList();
-    }
-
-    async function loadPolicies() {
-      const listEl = document.getElementById("policyList");
-      listEl.innerHTML = "Fetching policies from Master Database...";
       try {
-        const res = await fetch(`${SCRIPT_URL}?action=getPolicies`);
-        const data = await res.json();
-        allPolicies = data.policies || [];
-        renderPolicyList();
-        if (allPolicies.length > 0) {
-          openPolicy(allPolicies[0].code);
+        const res = await callApi({ action: "getHeadings" });
+        if (res.status === "success") {
+          allHeadings = res.headings;
+          renderHeadings(allHeadings);
+        } else {
+          document.getElementById("headingsList").innerHTML = `<p class="p-4 text-xs text-red-600">${res.message}</p>`;
         }
-      } catch (e) {
-        listEl.innerHTML = "Failed to load policies.";
+      } catch (err) {
+        document.getElementById("headingsList").innerHTML = `<p class="p-4 text-xs text-red-600">Failed to load headings.</p>`;
       }
     }
 
-    function renderPolicyList() {
-      const q = document.getElementById("searchInput").value.toLowerCase();
-      const filtered = allPolicies.filter(p => {
-        const matchChap = selectedChapter === "ALL" || p.chapter === selectedChapter;
-        const matchQuery = !q ||
-          p.code.toLowerCase().includes(q) ||
-          p.title.toLowerCase().includes(q) ||
-          p.bodyHtml.toLowerCase().includes(q);
-        return matchChap && matchQuery;
-      });
+    function renderHeadings(list) {
+      const container = document.getElementById("headingsList");
+      document.getElementById("headingCount").innerText = list.length + " Sections";
+      container.innerHTML = "";
 
-      const listEl = document.getElementById("policyList");
-      if (filtered.length === 0) {
-        listEl.innerHTML = "<p style='color:#64748b;font-size:0.88rem;'>No matching policies found.</p>";
+      if (list.length === 0) {
+        container.innerHTML = `<p class="p-4 text-xs text-slate-400 text-center">No matching headings found.</p>`;
         return;
       }
 
-      listEl.innerHTML = filtered.map(p => `
-        <div class="policy-item ${currentPolicy && currentPolicy.code === p.code ? 'active' : ''}" onclick="openPolicy('${p.code}')">
-          <div class="p-code">${p.code} &bull; ${p.nabhRef}</div>
-          <div class="p-title">${p.title}</div>
+      list.forEach(h => {
+        const btn = document.createElement("button");
+        const isActive = activeHeading && activeHeading.index === h.index;
+        btn.className = `w-full text-left px-3 py-2.5 rounded-lg text-xs transition flex items-start gap-2 ${
+          isActive
+            ? "bg-sky-900 text-white font-semibold shadow-sm"
+            : "font-semibold text-slate-700 hover:bg-sky-50"
+        }`;
+        btn.innerHTML = `
+          <i class="fa-solid fa-file-lines mt-0.5 ${isActive ? 'text-sky-300' : 'text-sky-700'}"></i>
+          <span class="leading-snug">${h.title}</span>
+        `;
+        btn.onclick = () => loadSectionContent(h);
+        container.appendChild(btn);
+      });
+    }
+
+    function filterHeadings() {
+      const q = document.getElementById("headingSearch").value.toLowerCase();
+      const filtered = allHeadings.filter(h => h.title.toLowerCase().includes(q));
+      renderHeadings(filtered);
+    }
+
+    async function loadSectionContent(headingObj) {
+      activeHeading = headingObj;
+      filterHeadings();
+
+      const contentArea = document.getElementById("policyContentArea");
+      const toolbar = document.getElementById("readerToolbar");
+      toolbar.classList.add("hidden");
+
+      contentArea.innerHTML = `
+        <div class="text-center py-20 text-slate-400">
+          <i class="fa-solid fa-circle-notch fa-spin text-3xl text-sky-700 mb-2"></i>
+          <p class="text-xs font-medium text-slate-600">Loading "${headingObj.title}"...</p>
         </div>
-      `).join("");
-    }
+      `;
 
-    function openPolicy(code) {
-      const p = allPolicies.find(item => item.code === code);
-      if (!p) return;
-      currentPolicy = p;
-      isEditing = false;
-
-      const bodyEl = document.getElementById("bodyContainer");
-      bodyEl.contentEditable = "false";
-      document.getElementById("saveBtn").style.display = "none";
-      if (currentUser && currentUser.role === "Admin") {
-        document.getElementById("editBtn").style.display = "inline-block";
-      }
-
-      document.getElementById("activeCodeBadge").textContent = `${p.code} — ${p.title}`;
-      document.getElementById("activeRefBadge").textContent = `NABH Ref: ${p.nabhRef}`;
-      document.getElementById("printDocCode").textContent = `${p.code} | ${p.revision}`;
-      document.getElementById("coverContainer").innerHTML = p.coverHtml;
-      bodyEl.innerHTML = p.bodyHtml;
-
-      renderPolicyList();
-    }
-
-    function toggleEdit() {
-      if (!currentPolicy) return;
-      isEditing = true;
-      const bodyEl = document.getElementById("bodyContainer");
-      bodyEl.contentEditable = "true";
-      bodyEl.focus();
-      document.getElementById("editBtn").style.display = "none";
-      document.getElementById("saveBtn").style.display = "inline-block";
-    }
-
-    async function saveEdits() {
-      if (!currentPolicy) return;
-      const saveBtn = document.getElementById("saveBtn");
-      saveBtn.textContent = "Saving...";
-      saveBtn.disabled = true;
-
-      const updatedHtml = document.getElementById("bodyContainer").innerHTML;
       try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify({
-            action: "updatePolicy",
-            code: currentPolicy.code,
-            bodyHtml: updatedHtml
-          })
+        const res = await callApi({
+          action: "getSectionContent",
+          index: headingObj.index
         });
-        const data = await res.json();
-        if (data.status === "success") {
-          currentPolicy.bodyHtml = updatedHtml;
-          alert("✅ Policy saved to Google Sheet!");
-          openPolicy(currentPolicy.code);
+
+        if (res.status === "success") {
+          toolbar.classList.remove("hidden");
+          toolbar.classList.add("flex");
+
+          const headerBlock = res.headerHtml ? `<div class="doc-header-space border-b border-slate-200 pb-3 mb-4">${res.headerHtml}</div>` : "";
+          const footerBlock = res.footerHtml ? `<div class="doc-footer-space border-t border-slate-200 pt-3 mt-6">${res.footerHtml}</div>` : "";
+
+          contentArea.innerHTML = `
+            <table class="print-wrapper w-full">
+              ${headerBlock ? `<thead><tr><td>${headerBlock}</td></tr></thead>` : ""}
+              <tbody><tr><td>${res.html || "<p class='text-sm text-slate-500'>No content found.</p>"}</td></tr></tbody>
+              ${footerBlock ? `<tfoot><tr><td>${footerBlock}</td></tr></tfoot>` : ""}
+            </table>
+          `;
         } else {
-          alert("❌ Error: " + data.message);
+          contentArea.innerHTML = `<p class="text-sm text-red-600">${res.message}</p>`;
         }
-      } catch (e) {
-        alert("❌ Network error while saving.");
-      } finally {
-        saveBtn.textContent = "💾 Save Changes";
-        saveBtn.disabled = false;
+      } catch (err) {
+        contentArea.innerHTML = `<p class="text-sm text-red-600">Error loading policy section.</p>`;
       }
     }
 
-    async function triggerResync() {
-      if (!confirm("Master Google Doc से सभी पॉलिसियों को दोबारा Sync करें?")) return;
-      const btn = document.getElementById("resyncBtn");
-      btn.textContent = "Syncing...";
+    function openCorrectionModal() {
+      if (!activeHeading) return;
+      document.getElementById("corrHeadingTitle").innerText = activeHeading.title;
+      document.getElementById("corrText").value = "";
+      document.getElementById("correctionModal").classList.remove("hidden");
+      document.getElementById("correctionModal").classList.add("flex");
+    }
+
+    function closeCorrectionModal() {
+      document.getElementById("correctionModal").classList.add("hidden");
+      document.getElementById("correctionModal").classList.remove("flex");
+    }
+
+    async function submitCorrection() {
+      const text = document.getElementById("corrText").value.trim();
+      if (!text) return alert("कृपया सुधार का विवरण लिखें।");
+      const btn = document.getElementById("submitCorrBtn");
       btn.disabled = true;
+      btn.innerText = "Submitting...";
       try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify({ action: "resync" })
+        const res = await callApi({
+          action: "submitCorrection",
+          userName: currentUser.name,
+          userPhone: currentUser.phone,
+          userDept: currentUser.department,
+          headingTitle: activeHeading.title,
+          correctionText: text
         });
-        const data = await res.json();
-        alert(`✅ Synced ${data.count} policies successfully!`);
-        await loadPolicies();
-      } catch (e) {
-        alert("❌ Sync failed.");
-      } finally {
-        btn.textContent = "↻ Sync Doc";
-        btn.disabled = false;
+        if (res.status === "success") {
+          alert(res.message);
+          closeCorrectionModal();
+        } else {
+          alert(res.message);
+        }
+      } catch (err) {
+        alert("Failed to submit correction.");
       }
+      btn.disabled = false;
+      btn.innerText = "Submit Correction";
     }
-
-    // Auto-restore session
-    window.onload = () => {
-      const saved = sessionStorage.getItem("dlsh_user");
-      if (saved) {
-        currentUser = JSON.parse(saved);
-        initPortal();
-      }
-    };
   </script>
 </body>
 </html>
